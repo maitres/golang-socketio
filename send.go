@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-	"github.com/graarh/golang-socketio/protocol"
+	"github.com/maitres/golang-socketio/protocol"
 )
 
 var (

@@ -17,12 +17,17 @@ Send message packet to socket
 */
 func send(msg *protocol.Message, c *Channel, args interface{}) error {
 	if args != nil {
-		json, err := json.Marshal(&args)
-		if err != nil {
-			return err
+		if v, ok := args.(string); ok {
+			msg.Args = v
+		} else if v, ok := args.(*string); ok {
+			msg.Args = *v
+		} else {
+			json, err := json.Marshal(&args)
+			if err != nil {
+				return err
+			}
+			msg.Args = string(json)
 		}
-
-		msg.Args = string(json)
 	}
 
 	command, err := protocol.Encode(msg)
@@ -35,7 +40,6 @@ func send(msg *protocol.Message, c *Channel, args interface{}) error {
 	}
 
 	c.out <- command
-
 	return nil
 }
 
